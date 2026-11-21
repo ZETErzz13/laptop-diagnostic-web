@@ -1,649 +1,1300 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval';">
-  <title>Laptop Diagnostic & Service Portal | CV. Bagus Yahoo Computer</title>
-  
-  <!-- Supabase JS SDK CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#081321">
+  <title>Angah Teknisi Laptop</title>
   <style>
     :root {
-      --bg: #060b14;
-      --panel: #0d1626;
-      --panel2: #121e33;
-      --line: #1e2f4a;
-      --text: #eef5ff;
-      --muted: #889bb5;
-      --blue: #2d8cff;
-      --cyan: #00e5ff;
-      --green: #22d3ee;
-      --green-accent: #10b981;
-      --red: #ff5555;
-      --gold: #f59e0b;
+      --bg: #081321;
+      --p: #112139;
+      --p2: #172b46;
+      --line: #2b4261;
+      --t: #eef6ff;
+      --m: #a5b8d0;
+      --b: #278fff;
+      --c: #54d9ee;
+      --g: #4cdda5;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 85px;
+    }
+
     body {
-      background: radial-gradient(ellipse at 80% -10%, #15294a 0%, transparent 50%), var(--bg);
-      color: var(--text);
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      line-height: 1.6;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      margin: 0;
+      background: radial-gradient(ellipse at 20% 0, #14365b, transparent 35%), var(--bg);
+      color: var(--t);
+      font: 15px/1.6 Arial, sans-serif;
     }
 
-    button, input { font: inherit; }
-
-    /* ================= LOGIN BOX STYLING ================= */
-    .login-wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-    }
-
-    .login-card {
-      width: 100%;
-      max-width: 420px;
-      background: rgba(13, 22, 38, 0.95);
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      padding: 32px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(10px);
-    }
-
-    .login-header {
-      text-align: center;
-      margin-bottom: 24px;
-    }
-
-    .login-header .icon {
-      width: 54px;
-      height: 54px;
-      background: linear-gradient(135deg, var(--blue), var(--cyan));
-      border-radius: 16px;
-      display: grid;
-      place-items: center;
-      font-size: 26px;
-      margin: 0 auto 14px;
-      box-shadow: 0 8px 24px rgba(45, 140, 255, 0.4);
-    }
-
-    .login-header h2 {
-      font-size: 22px;
-      color: var(--text);
-    }
-
-    .login-header p {
-      font-size: 13px;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-
-    .form-group {
-      margin-bottom: 16px;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .form-group input {
-      width: 100%;
-      padding: 12px 14px;
-      background: #080d18;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      color: var(--text);
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .form-group input:focus {
-      border-color: var(--blue);
-    }
-
-    .btn-submit {
-      width: 100%;
-      padding: 13px;
-      background: linear-gradient(100deg, var(--blue), #4a73ef);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 8px 20px rgba(45, 140, 255, 0.3);
-      transition: transform 0.1s, opacity 0.2s;
-    }
-
-    .btn-submit:hover { opacity: 0.95; }
-    .btn-submit:active { transform: scale(0.98); }
-
-    .error-alert {
-      margin-top: 14px;
-      padding: 10px;
-      border-radius: 8px;
-      background: rgba(255, 85, 85, 0.15);
-      border: 1px solid var(--red);
-      color: #ff9999;
-      font-size: 13px;
-      text-align: center;
-      display: none;
-    }
-
-    /* ================= MAIN APPLICATION STYLING ================= */
     .wrap {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 24px 20px 60px;
-      width: 100%;
+      width: min(1120px, 92%);
+      margin: auto;
     }
 
-    header.top {
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: #081321ed;
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(12px);
+    }
+
+    nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--line);
-      margin-bottom: 30px;
+      min-height: 70px;
+      gap: 15px;
     }
 
     .brand {
+      font-weight: 900;
+      letter-spacing: .5px;
+    }
+
+    .brand small {
+      display: block;
+      color: var(--m);
+      font-size: 10px;
+      letter-spacing: 1.4px;
+    }
+
+    .mark {
+      display: inline-grid;
+      place-items: center;
+      background: linear-gradient(130deg, var(--b), var(--c));
+      color: #061321;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      margin-right: 9px;
+    }
+
+    .links {
       display: flex;
-      gap: 14px;
+      gap: 16px;
+      font-size: 12px;
+    }
+
+    .links a, a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .links a:hover {
+      color: var(--c);
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 16px;
+      background: linear-gradient(110deg, #176fe0, #20a6df);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    .btn.alt {
+      background: #172d49;
+      border: 1px solid var(--line);
+    }
+
+    .hero {
+      padding: 70px 0 45px;
+    }
+
+    .heroGrid {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 30px;
       align-items: center;
     }
 
-    .brand .logo {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--blue), var(--cyan));
+    .pill, .tag {
+      font-size: 11px;
+      color: #a9e5ff;
+      background: #123452;
+      border: 1px solid #2b5b83;
+      border-radius: 30px;
+      padding: 5px 10px;
+      display: inline-block;
+    }
+
+    h1 {
+      font-size: clamp(36px, 5vw, 62px);
+      line-height: 1.05;
+      letter-spacing: -1.5px;
+      margin: 20px 0;
+    }
+
+    .grad {
+      color: #63d9ed;
+    }
+
+    .lead {
+      color: #b6c7db;
+      font-size: 17px;
+      max-width: 650px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 24px 0;
+    }
+
+    .heroCard, .card, .panel {
+      background: linear-gradient(145deg, #142944, #0e1b2e);
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      padding: 20px;
+    }
+
+    .heroCard {
+      text-align: center;
+      box-shadow: 0 20px 55px #0005;
+    }
+
+    .laptop {
+      font-size: 100px;
+      padding: 20px;
+    }
+
+    .stats, .grid {
       display: grid;
-      place-items: center;
-      font-weight: 900;
+      gap: 13px;
+    }
+
+    .stats {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stat {
+      background: #0b192b;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      padding: 12px;
+    }
+
+    .stat b {
+      display: block;
+      color: #86d7ff;
       font-size: 20px;
     }
 
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+    .stat small {
+      color: var(--m);
     }
 
-    .badge-teknisi {
-      background: #122c44;
-      border: 1px solid var(--blue);
-      color: var(--cyan);
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
+    section {
+      padding: 45px 0;
     }
 
-    .btn-logout {
-      background: transparent;
-      border: 1px solid var(--line);
-      color: var(--muted);
-      padding: 6px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 12px;
-    }
-
-    .btn-logout:hover { color: var(--red); border-color: var(--red); }
-
-    .layout {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    @media (max-width: 900px) {
-      .layout { grid-template-columns: 1fr; }
-    }
-
-    .card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 24px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    }
-
-    .card h2 { font-size: 18px; margin-bottom: 4px; color: var(--cyan); }
-    .card .sub { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
-
-    .symptoms-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px;
-    }
-
-    .symptom-btn {
-      background: var(--panel2);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 14px;
-      color: var(--text);
-      text-align: left;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .symptom-btn:hover {
-      border-color: var(--blue);
-      transform: translateY(-2px);
-    }
-
-    .symptom-btn.active {
-      background: rgba(45, 140, 255, 0.15);
-      border-color: var(--blue);
-      box-shadow: 0 0 15px rgba(45, 140, 255, 0.3);
-    }
-
-    .symptom-btn b { display: block; font-size: 14px; margin-bottom: 2px; }
-    .symptom-btn small { color: var(--muted); font-size: 11px; }
-
-    .actions { display: flex; gap: 10px; margin-top: 20px; }
-    
-    .btn-action {
-      padding: 12px 20px;
-      border-radius: 10px;
-      border: none;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .btn-primary { background: var(--blue); color: white; }
-    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
-    .btn-secondary { background: var(--panel2); color: var(--text); border: 1px solid var(--line); }
-
-    /* Terminal & Scanner Animated View */
-    .terminal-box {
-      background: #040810;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 16px;
-      font-family: monospace;
-      font-size: 12px;
-      color: var(--cyan);
-      min-height: 120px;
+    .head {
       margin-bottom: 20px;
     }
 
-    .tool-box {
-      margin-top: 20px;
-      padding: 16px;
-      background: var(--panel2);
-      border-radius: 12px;
+    .kicker {
+      color: var(--c);
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 1.5px;
+    }
+
+    .head h2 {
+      margin: 5px 0;
+      font-size: 30px;
+    }
+
+    .muted, .head p {
+      color: var(--m);
+    }
+
+    .grid4 { grid-template-columns: repeat(4, 1fr); }
+    .grid3 { grid-template-columns: repeat(3, 1fr); }
+    .grid2 { grid-template-columns: repeat(2, 1fr); }
+
+    .card h3 {
+      margin: 7px 0;
+    }
+
+    .card p {
+      color: var(--m);
+      font-size: 13px;
+      margin: 0;
+    }
+
+    .ico {
+      font-size: 25px;
+    }
+
+    .symptoms {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .sym {
+      background: #0e1c2f;
+      color: var(--t);
       border: 1px solid var(--line);
-    }
-
-    .tool-box h4 { font-size: 14px; margin-bottom: 10px; color: var(--gold); }
-
-    .cleaner-canvas {
-      width: 100%;
-      height: 60px;
-      background: #1a293d;
-      border-radius: 8px;
-      position: relative;
+      padding: 14px;
+      border-radius: 12px;
+      text-align: left;
       cursor: pointer;
-      overflow: hidden;
+    }
+
+    .sym:hover, .sym.active {
+      border-color: var(--b);
+      background: #153252;
+    }
+
+    .sym b, .sym small {
+      display: block;
+    }
+
+    .sym small {
+      color: var(--m);
+    }
+
+    .result {
+      display: none;
+      background: #0d233b;
+      border: 1px solid #32628a;
+      border-radius: 14px;
+      padding: 19px;
+      margin-top: 16px;
+    }
+
+    .result li {
+      margin: 5px 0;
+      color: #d0deed;
+    }
+
+    .notice {
+      background: #352d1d;
+      border: 1px solid #725c32;
+      color: #ffe0a0;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      margin: 12px 0;
+    }
+
+    .good {
+      background: #102e28;
+      border-color: #28634e;
+      color: #b3f5d7;
+    }
+
+    .field {
+      display: grid;
+      gap: 5px;
+      margin-bottom: 12px;
+    }
+
+    .field label {
+      font-size: 12px;
+      color: #bfd0e2;
+    }
+
+    .field input, .field select, .field textarea {
+      width: 100%;
+      padding: 11px;
+      border-radius: 9px;
+      border: 1px solid var(--line);
+      background: #091727;
+      color: var(--t);
+    }
+
+    .field textarea {
+      min-height: 85px;
+    }
+
+    .formgrid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .toolgrid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 13px;
+    }
+
+    .keyboard {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 4px;
+    }
+
+    .key {
+      background: #1b304a;
+      border: 1px solid #3b5777;
+      color: white;
+      padding: 7px 1px;
+      border-radius: 5px;
+      font-size: 10px;
+    }
+
+    .key.hit {
+      background: #1689e7;
+    }
+
+    .screen {
+      height: 110px;
+      background: #111;
+      border-radius: 9px;
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      margin: 10px 0;
+    }
+
+    .colors {
       display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+
+    .colors button {
+      border: 1px solid #aaa;
+      border-radius: 6px;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .video {
+      background: #02070d;
+      min-height: 130px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      overflow: hidden;
+    }
+
+    .video video {
+      max-width: 100%;
+      max-height: 200px;
+    }
+
+    .meter {
+      height: 8px;
+      background: #263950;
+      border-radius: 10px;
+    }
+
+    .meter i {
+      display: block;
+      width: 0;
+      height: 100%;
+      background: var(--g);
+    }
+
+    .table {
+      overflow: auto;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 12px;
+    }
+
+    td, th {
+      text-align: left;
+      padding: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    th {
+      color: #a9d9ff;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .tabs button {
+      background: #192d48;
+      color: white;
+      border: 1px solid var(--line);
+      padding: 8px 12px;
+      border-radius: 8px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .contact {
+      display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      background: #123355;
+      border: 1px solid #32618d;
+      padding: 22px;
+      border-radius: 16px;
     }
 
-    .ram-pin {
-      width: 80%;
-      height: 16px;
-      background: linear-gradient(90deg, #8a7322 0%, #ffd700 50%, #8a7322 100%);
-      border-radius: 3px;
-      position: relative;
-      transition: filter 0.5s;
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 25px 0;
+      color: var(--m);
+      font-size: 12px;
     }
 
-    .ram-dirty { filter: opacity(0.4) grayscale(0.8) contrast(1.5); }
-    .ram-clean { filter: opacity(1) grayscale(0) brightness(1.2); }
+    .faq details {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+    }
 
-    @media print {
-      body * { visibility: hidden; }
-      #printable-area, #printable-area * { visibility: visible; }
-      #printable-area { position: absolute; left: 0; top: 0; width: 100%; color: black; background: white; padding: 20px; }
+    summary {
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .faq p {
+      color: var(--m);
+      font-size: 13px;
+    }
+
+    @media (max-width: 850px) {
+      .links { display: none; }
+      .heroGrid { grid-template-columns: 1fr; }
+      .grid4 { grid-template-columns: repeat(2, 1fr); }
+      .grid3 { grid-template-columns: repeat(2, 1fr); }
+      .symptoms { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 560px) {
+      .grid4, .grid3, .grid2, .toolgrid, .formgrid { grid-template-columns: 1fr; }
+      .symptoms { grid-template-columns: 1fr; }
+      .hero { padding-top: 42px; }
+      .laptop { font-size: 75px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ================= 1. FORM LOGIN SUPABASE ================= -->
-  <div id="login-box" class="login-wrapper">
-    <div class="login-card">
-      <div class="login-header">
-        <div class="icon">⌁</div>
-        <h2>Portal Teknisi</h2>
-        <p>CV. Bagus Yahoo Computer</p>
-      </div>
-
-      <div class="form-group">
-        <label>Email Teknisi</label>
-        <input type="email" id="input-email" placeholder="contoh: teknisi@yahoo.com" required />
-      </div>
-
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" id="input-password" placeholder="••••••••" required />
-      </div>
-
-      <button id="btn-login" class="btn-submit">Masuk Sistem</button>
-      <div id="error-msg" class="error-alert"></div>
+  <!-- HEADER -->
+  <header>
+    <div class="wrap">
+      <nav>
+        <a class="brand" href="#home">
+          <span class="mark">⌁</span>ANGAH TEKNISI LAPTOP
+          <small>DIAGNOSTIC • REPAIR • CARE</small>
+        </a>
+        <div class="links">
+          <a href="#layanan">Layanan</a>
+          <a href="#diagnostic">Diagnostic</a>
+          <a href="#booking">Booking</a>
+          <a href="#tracking">Tracking</a>
+          <a href="#edukasi">Edukasi</a>
+        </div>
+        <a class="btn" href="#booking">Booking Servis</a>
+      </nav>
     </div>
-  </div>
+  </header>
 
-  <!-- ================= 2. HALAMAN UTAMA DIAGNOSTIC ================= -->
-  <div id="main-content" style="display: none;">
-    <main class="wrap">
-      <header class="top">
-        <div class="brand">
-          <div class="logo">⌁</div>
-          <div>
-            <strong>CV. BAGUS YAHOO COMPUTER</strong>
-            <div style="font-size: 11px; color: var(--muted);">SMART HARDWARE DIAGNOSTIC SYSTEM</div>
-          </div>
-        </div>
-        <div class="user-info">
-          <span class="badge-teknisi" id="user-display">Teknisi Active</span>
-          <button class="btn-logout" id="btn-logout">Keluar</button>
-        </div>
-      </header>
-
-      <div class="layout">
-        <!-- Panel Input Gejala -->
-        <section class="card">
-          <h2>01 / Select Failure Symptom</h2>
-          <p class="sub">Pilih gejala kerusakan hardware pada laptop pelanggan.</p>
-          
-          <div class="symptoms-grid" id="symptoms-container">
-            <button class="symptom-btn" data-id="dead">
-              <b>Laptop Mati Total</b>
-              <small>Tidak ada lampu indikator / respon daya sama sekali.</small>
-            </button>
-            <button class="symptom-btn" data-id="black">
-              <b>Lampu Hidup / No Display</b>
-              <small>Mesin berputar tapi layar tetap gelap hitam.</small>
-            </button>
-            <button class="symptom-btn" data-id="shutdown">
-              <b>Menyala Sebentar Lalu Mati</b>
-              <small>Power drops beberapa detik setelah dihidupkan.</small>
-            </button>
-            <button class="symptom-btn" data-id="beep">
-              <b>Suara Beep Berulang</b>
-              <small>Motherboard mengeluarkan kode bunyi peringatan POST.</small>
-            </button>
-          </div>
-
+  <main>
+    <!-- HERO SECTION -->
+    <section class="hero" id="home">
+      <div class="wrap heroGrid">
+        <div>
+          <span class="pill">● LAYANAN SERVIS LAPTOP</span>
+          <h1>Kenali Masalah Laptop.<br><span class="grad">Temukan Langkahnya.</span></h1>
+          <p class="lead">Pengecekan awal, panduan troubleshooting, dan pendaftaran servis laptop dalam satu tempat. Dapatkan informasi sebelum menentukan langkah perbaikan.</p>
           <div class="actions">
-            <button class="btn-action btn-primary" id="btn-diagnose" disabled>Jalankan Pemindaian</button>
-            <button class="btn-action btn-secondary" id="btn-reset">Reset</button>
+            <a class="btn" href="#diagnostic">Mulai Diagnosis →</a>
+            <a class="btn alt" href="#booking">Jadwalkan Servis</a>
           </div>
-
-          <!-- Simulator Pembersih Pin RAM -->
-          <div class="tool-box">
-            <h4>Interactive RAM Pin Cleaner Tool</h4>
-            <p style="font-size: 12px; color: var(--muted); margin-bottom: 8px;">Klik area kuningan pin RAM di bawah untuk mensimulasikan pembersihan korosi/oksidasi dengan penghapus pensil:</p>
-            <div class="cleaner-canvas" id="cleaner-tool">
-              <div class="ram-pin ram-dirty" id="ram-pin-visual"></div>
-            </div>
-            <div id="clean-status" style="font-size: 11px; text-align: center; margin-top: 6px; color: var(--gold);">Status Pin: KOTOR / TEROKSIDASI</div>
+          <p class="muted">✓ Panduan hardware & software ✓ Pengecekan mandiri ✓ Konsultasi teknisi</p>
+        </div>
+        <div class="heroCard">
+          <div class="laptop">💻</div>
+          <div class="stats">
+            <div class="stat"><b>15+</b><small>Topik gejala</small></div>
+            <div class="stat"><b>6</b><small>Modul layanan</small></div>
+            <div class="stat"><b>Online</b><small>Diagnosis awal</small></div>
+            <div class="stat"><b>WhatsApp</b><small>Konsultasi</small></div>
           </div>
-        </section>
-
-        <!-- Panel Hasil Diagnosis -->
-        <section class="card" id="printable-area">
-          <h2>02 / Diagnostic Report</h2>
-          <p class="sub">Hasil analisa komponen hardware dan saran perbaikan.</p>
-          
-          <div class="terminal-box" id="terminal-log">
-            SYSTEM READY. Waiting for diagnostic input...
-          </div>
-
-          <div id="result-output" style="display: none;">
-            <!-- Hasil diagnosa akan dimuat di sini -->
-          </div>
-
-          <div style="margin-top: 20px; display: flex; gap: 10px;">
-            <button class="btn-action btn-secondary" id="btn-sound" style="display: none;">🔊 Test Beep RAM Sound</button>
-            <button class="btn-action btn-secondary" id="btn-print" style="display: none;">🖨️ Cetak Work Order</button>
-          </div>
-        </section>
+        </div>
       </div>
-    </main>
-  </div>
+    </section>
 
-  <!-- ================= 3. JAVASCRIPT LOGIC ================= -->
+    <!-- LAYANAN UTAMA -->
+    <section id="layanan">
+      <div class="wrap">
+        <div class="head">
+          <span class="kicker">01 / LAYANAN UTAMA</span>
+          <h2>Solusi kebutuhan laptop</h2>
+          <p class="muted">Jenis layanan yang dapat dikonsultasikan.</p>
+        </div>
+        <div class="grid grid4">
+          <div class="card"><span class="ico">🖥️</span><h3>LCD & Display</h3><p>Pemeriksaan layar, fleksibel, dan tampilan.</p></div>
+          <div class="card"><span class="ico">🧠</span><h3>Motherboard</h3><p>Analisis awal gangguan daya dan komponen.</p></div>
+          <div class="card"><span class="ico">⚡</span><h3>Upgrade RAM / SSD</h3><p>Konsultasi peningkatan memori dan storage.</p></div>
+          <div class="card"><span class="ico">🌡️</span><h3>Cleaning</h3><p>Pemeriksaan kipas dan sistem pendingin.</p></div>
+          <div class="card"><span class="ico">🪟</span><h3>Instalasi Windows</h3><p>Instalasi ulang dan perbaikan sistem.</p></div>
+          <div class="card"><span class="ico">⌨️</span><h3>Keyboard / Touchpad</h3><p>Pemeriksaan perangkat input.</p></div>
+          <div class="card"><span class="ico">🔋</span><h3>Baterai & Charging</h3><p>Pemeriksaan adaptor dan pengisian daya.</p></div>
+          <div class="card"><span class="ico">🔊</span><h3>Audio & Webcam</h3><p>Pemeriksaan speaker, mic, dan kamera.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ONLINE DIAGNOSTIC -->
+    <section id="diagnostic">
+      <div class="wrap">
+        <div class="head">
+          <span class="kicker">02 / ONLINE DIAGNOSTIC</span>
+          <h2>Pengecekan mandiri laptop</h2>
+          <p class="muted">Pilih gejala. Hasil merupakan dugaan awal, bukan kepastian kerusakan komponen.</p>
+        </div>
+        <div class="symptoms" id="symptoms"></div>
+        <div class="result" id="diagnosis" aria-live="polite"></div>
+
+        <h3 style="margin:30px 0 12px">Alat tes komponen langsung</h3>
+        <div class="toolgrid">
+          <!-- Keyboard Tester -->
+          <div class="panel">
+            <h3>⌨️ Keyboard Tester</h3>
+            <p class="muted">Tekan tombol keyboard fisik untuk melihat tombol terdeteksi.</p>
+            <div class="keyboard" id="keys"></div>
+            <small id="keymsg" class="muted">Belum ada tombol terdeteksi.</small>
+          </div>
+          <!-- Screen Tester -->
+          <div class="panel">
+            <h3>🖥️ Screen & Pixel Test</h3>
+            <p class="muted">Tampilkan warna solid untuk memeriksa titik atau garis pada layar.</p>
+            <div id="screen" class="screen">SCREEN TEST</div>
+            <div class="colors">
+              <button data-color="#f00" style="background:red">Merah</button>
+              <button data-color="#0f0" style="background:lime;color:#111">Hijau</button>
+              <button data-color="#00f" style="background:blue">Biru</button>
+              <button data-color="#fff" style="background:white;color:#111">Putih</button>
+              <button data-color="#000" style="background:black;color:white">Hitam</button>
+              <button id="screenOff" class="btn alt">Selesai</button>
+            </div>
+          </div>
+          <!-- Audio & Mic Tester -->
+          <div class="panel">
+            <h3>🔊 Audio & Microphone</h3>
+            <p class="muted">Uji nada kiri/kanan dan indikator input mikrofon.</p>
+            <button class="btn" id="left">Tes kiri</button>
+            <button class="btn" id="right">Tes kanan</button>
+            <button class="btn alt" id="stereo">Stereo</button>
+            <p>
+              <button class="btn" id="micOn">Mulai mikrofon</button>
+              <button class="btn alt" id="micOff">Stop</button>
+            </p>
+            <div class="meter"><i id="meter"></i></div>
+            <small id="micmsg" class="muted">Mikrofon belum digunakan.</small>
+          </div>
+          <!-- Webcam Tester -->
+          <div class="panel">
+            <h3>📷 Webcam Tester</h3>
+            <p class="muted">Kamera aktif hanya setelah izin browser diberikan. Video tidak dikirim ke server oleh halaman demo.</p>
+            <div class="video">
+              <video id="cam" autoplay playsinline muted></video>
+              <span id="cammsg">Kamera belum aktif</span>
+            </div>
+            <p style="margin-top:10px">
+              <button class="btn" id="camOn">Aktifkan kamera</button>
+              <button class="btn alt" id="camOff">Matikan</button>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOOKING SERVICE -->
+    <section id="booking">
+      <div class="wrap">
+        <div class="head">
+          <span class="kicker">03 / BOOKING SERVICE</span>
+          <h2>Daftarkan servis laptop</h2>
+          <p class="muted">Isi keluhan dan jadwal. Website akan menyiapkan pesan WhatsApp untuk teknisi.</p>
+        </div>
+        <div class="grid grid2">
+          <div class="card">
+            <form id="bookingForm">
+              <div class="formgrid">
+                <div class="field">
+                  <label>Nama *</label>
+                  <input name="nama" required>
+                </div>
+                <div class="field">
+                  <label>Nomor WhatsApp *</label>
+                  <input name="hp" required type="tel">
+                </div>
+                <div class="field">
+                  <label>Merek laptop *</label>
+                  <input name="merek" required placeholder="ASUS, Lenovo, HP">
+                </div>
+                <div class="field">
+                  <label>Tipe / model</label>
+                  <input name="model">
+                </div>
+                <div class="field">
+                  <label>Nomor seri (opsional)</label>
+                  <input name="serial">
+                </div>
+                <div class="field">
+                  <label>Jenis layanan *</label>
+                  <select name="layanan" required>
+                    <option value="">Pilih layanan</option>
+                    <option>Diagnosis</option>
+                    <option>Perbaikan hardware</option>
+                    <option>Perbaikan software / Windows</option>
+                    <option>Upgrade RAM / SSD</option>
+                    <option>Cleaning</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Tanggal *</label>
+                  <input name="tanggal" type="date" required>
+                </div>
+                <div class="field">
+                  <label>Jam *</label>
+                  <select name="jam" required>
+                    <option value="">Pilih jam</option>
+                    <option>09.00–10.00</option>
+                    <option>10.00–11.00</option>
+                    <option>13.00–14.00</option>
+                    <option>14.00–15.00</option>
+                    <option>15.00–16.00</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field">
+                <label>Keluhan detail *</label>
+                <textarea name="keluhan" required></textarea>
+              </div>
+              <div class="field">
+                <label>Penyerahan perangkat</label>
+                <select name="metode">
+                  <option>Datang langsung</option>
+                  <option>Kurir / antar-jemput (konfirmasi dahulu)</option>
+                </select>
+              </div>
+              <div class="notice">Jangan masukkan kata sandi, PIN, atau informasi sensitif. Nomor seri opsional.</div>
+              <button class="btn">Kirim permintaan via WhatsApp →</button>
+            </form>
+          </div>
+          <div class="card">
+            <h3>Alur kerja servis</h3>
+            <ol>
+              <li><b>Pengecekan awal</b><p class="muted">Teknisi mencatat keluhan dan memeriksa perangkat.</p></li>
+              <li><b>Konfirmasi biaya</b><p class="muted">Estimasi disampaikan sebelum pengerjaan.</p></li>
+              <li><b>Pengerjaan servis</b><p class="muted">Perbaikan setelah persetujuan pelanggan.</p></li>
+              <li><b>Pengujian & serah terima</b><p class="muted">Perangkat diuji dan ketentuan garansi dijelaskan.</p></li>
+            </ol>
+            <div class="notice good">Booking belum terkonfirmasi sampai teknisi menyetujui jadwal.</div>
+          </div>
+        </div>
+
+        <!-- Estimasi Biaya -->
+        <div class="card" style="margin-top:14px">
+          <h3>Estimasi biaya & waktu</h3>
+          <p class="muted">Pilih jenis layanan untuk melihat status estimasi. Tarif resmi perlu diisi berdasarkan daftar harga Angah Teknisi Laptop agar tidak menampilkan angka yang keliru.</p>
+          <div class="formgrid">
+            <div class="field">
+              <label>Jenis layanan</label>
+              <select id="estimateType">
+                <option>Diagnosis awal</option>
+                <option>Perbaikan hardware</option>
+                <option>Perbaikan Windows / software</option>
+                <option>Upgrade RAM / SSD</option>
+                <option>Cleaning / perawatan</option>
+                <option>Penggantian LCD / keyboard / baterai</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Perkiraan waktu</label>
+              <select id="estimateTime">
+                <option value="Menunggu hasil pemeriksaan">Belum diperiksa</option>
+                <option value="Dapat diperkirakan setelah pengecekan">Perangkat perlu dicek</option>
+                <option value="Menyesuaikan ketersediaan komponen">Menunggu suku cadang</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn" id="estimateBtn">Lihat estimasi</button>
+          <div class="result" id="estimateResult"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRACKING STATUS -->
+    <section id="tracking">
+      <div class="wrap">
+        <div class="head">
+          <span class="kicker">04 / CUSTOMER PORTAL</span>
+          <h2>Lacak status servis</h2>
+          <p class="muted">Masukkan nomor tiket dari booking. Tiket demo hanya tersimpan pada browser ini.</p>
+        </div>
+        <div class="card">
+          <div class="formgrid">
+            <div class="field">
+              <label>Nomor tiket</label>
+              <input id="ticketSearch" placeholder="ANG-2026-12345">
+            </div>
+            <div style="display:flex;align-items:flex-end">
+              <button class="btn" id="track">Cari status</button>
+            </div>
+          </div>
+          <div id="trackResult" class="result"></div>
+          <div id="history" class="muted" style="margin-top:15px"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DASHBOARD ADMIN & TEKNISI -->
+    <section id="admin">
+      <div class="wrap">
+        <div class="head">
+          <span class="kicker">05 / DASHBOARD ADMIN & TEKNISI</span>
+          <h2>Panel operasional demo</h2>
+          <p class="muted">Contoh daftar tiket, stok komponen, dan invoice sederhana.</p>
+        </div>
+        <div class="notice">Mode demo: belum ada login server atau database online. Jangan gunakan untuk menyimpan data pelanggan sungguhan sebelum backend dan keamanan ditambahkan.</div>
+        <div class="tabs">
+          <button data-tab="tickets">Tiket</button>
+          <button data-tab="stock">Inventaris</button>
+          <button data-tab="invoice">Invoice</button>
+        </div>
+        <div class="card" id="tickets">
+          <div class="table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Tiket</th>
+                  <th>Perangkat</th>
+                  <th>Keluhan</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="rows">
+                <tr><td colspan="4">Belum ada tiket demo.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card hidden" id="stock">
+          <h3>Contoh inventaris</h3>
+          <table>
+            <thead>
+              <tr><th>Komponen</th><th>Stok contoh</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>SSD 256 GB</td><td>3</td></tr>
+              <tr><td>RAM DDR4 8 GB</td><td>4</td></tr>
+              <tr><td>Baterai laptop</td><td>2</td></tr>
+              <tr><td>Keyboard</td><td>2</td></tr>
+              <tr><td>Pasta termal</td><td>5</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card hidden" id="invoice">
+          <h3>Invoice sederhana</h3>
+          <div class="formgrid">
+            <div class="field"><label>No. tiket</label><input id="ivTicket"></div>
+            <div class="field"><label>Nama pelanggan</label><input id="ivName"></div>
+            <div class="field"><label>Deskripsi layanan</label><input id="ivDesc"></div>
+            <div class="field"><label>Biaya (Rp)</label><input id="ivCost" type="number"></div>
+          </div>
+          <button class="btn" id="makeInvoice">Buat invoice</button>
+          <div id="ivOut" class="result"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PUSAT EDUKASI -->
+    <section id="edukasi">
+      <div class="wrap">
+        <div class="head">
+          <span class="kicker">06 / PUSAT EDUKASI</span>
+          <h2>Penyebab dan perawatan laptop</h2>
+          <p class="muted">Pengetahuan awal untuk membantu pengguna memahami gejala umum.</p>
+        </div>
+        <div class="grid grid3">
+          <div class="card">
+            <h3>🌡️ Laptop panas</h3>
+            <p>Ventilasi tertutup debu, kipas tidak optimal, atau aplikasi memakai sumber daya tinggi.</p>
+          </div>
+          <div class="card">
+            <h3>🔋 Baterai tidak mengisi</h3>
+            <p>Adaptor, kabel, port, baterai, driver, atau rangkaian charging perlu diperiksa.</p>
+          </div>
+          <div class="card">
+            <h3>💾 Windows corrupt</h3>
+            <p>File sistem rusak, pembaruan gagal, driver konflik, atau penyimpanan bermasalah.</p>
+          </div>
+        </div>
+        <div class="card faq" style="margin-top:14px">
+          <h3>FAQ</h3>
+          <details>
+            <summary>Apakah diagnosis online pasti benar?</summary>
+            <p>Tidak. Hasil hanya perkiraan. Kepastian memerlukan pemeriksaan perangkat oleh teknisi.</p>
+          </details>
+          <details>
+            <summary>Berapa lama servis?</summary>
+            <p>Bergantung jenis kerusakan, ketersediaan komponen, dan antrean. Estimasi diberikan setelah pemeriksaan.</p>
+          </details>
+          <details>
+            <summary>Apakah data laptop akan dihapus?</summary>
+            <p>Jangan lakukan reset atau instal ulang tanpa persetujuan. Cadangkan data penting sebelum servis jika memungkinkan.</p>
+          </details>
+          <details>
+            <summary>Bagaimana jika baterai menggembung atau tercium bau terbakar?</summary>
+            <p>Hentikan penggunaan, jangan tekan atau bongkar baterai, dan minta bantuan teknisi kompeten.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT BANNER -->
+    <section>
+      <div class="wrap">
+        <div class="contact">
+          <div>
+            <span class="kicker">HUBUNGI TEKNISI</span>
+            <h2 style="margin:3px 0">ANGAH TEKNISI LAPTOP</h2>
+            <span class="muted">📍 Jalan Dorak · ☎ 082385634631</span>
+          </div>
+          <a class="btn" href="https://wa.me/6282385634631" target="_blank" rel="noopener">Chat WhatsApp ↗</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap">© 2026 ANGAH TEKNISI LAPTOP · Website informasi dan demo layanan diagnostik laptop.</div>
+  </footer>
+
+  <!-- SCRIPT LOGIC -->
   <script>
-    // -------------------------------------------------------------
-    // A. KONFIGURASI SUPABASE (Ganti dengan Data Proyek Supabase Kamu)
-    // -------------------------------------------------------------
-    const SUPABASE_URL = 'https://PROJECT_ID_ANDA.supabase.co'; 
-    const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY_HERE'; 
-    
-    // Inisialisasi Supabase Client
-    let _supabase = null;
-    if (SUPABASE_URL !== 'https://PROJECT_ID_ANDA.supabase.co') {
-      _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const WA = '6282385634631';
+
+    const db = {
+      mati: [
+        'Laptop mati total',
+        'Hardware / kelistrikan',
+        ['Adaptor atau kabel charger bermasalah.', 'Baterai atau konektor daya mengalami gangguan.', 'DC jack, IC power, atau motherboard perlu diperiksa.'],
+        ['Pastikan stopkontak berfungsi dan adaptor terpasang benar.', 'Periksa kondisi luar kabel; jangan gunakan jika rusak atau berbau.', 'Amati lampu indikator pengisian.', 'Jika tetap mati, hentikan percobaan dan minta teknisi memeriksa rangkaian daya.'],
+        'Teknisi perlu menguji adaptor, baterai, konektor DC, dan rangkaian power. Jangan membuka adaptor atau motherboard sendiri.'
+      ],
+      layar: [
+        'Layar tidak menyala',
+        'Hardware / display',
+        ['LCD atau kabel fleksibel bermasalah.', 'RAM tidak terdeteksi.', 'BIOS, GPU, atau motherboard mengalami gangguan.'],
+        ['Pastikan laptop menunjukkan tanda menyala.', 'Naikkan kecerahan dan coba tombol display sesuai merek.', 'Jika ada, sambungkan monitor eksternal.', 'Jika tetap gelap, minta teknisi memeriksa LCD, RAM, dan kabel fleksibel.'],
+        'Pemeriksaan lanjutan pada LCD, kabel fleksibel, RAM, BIOS, dan grafis oleh teknisi.'
+      ],
+      baterai: [
+        'Baterai tidak mengisi saat dicas',
+        'Hardware / charging',
+        ['Adaptor atau kabel tidak sesuai/rusak.', 'Port pengisian longgar.', 'Baterai menurun kualitasnya.', 'Driver atau rangkaian charging bermasalah.'],
+        ['Gunakan adaptor sesuai spesifikasi laptop.', 'Periksa kondisi luar kabel dan konektor.', 'Coba stopkontak lain.', 'Periksa status baterai di Windows.', 'Jika baterai menggembung atau panas, hentikan penggunaan.'],
+        'Teknisi menguji adaptor, baterai, port, driver, dan rangkaian charging.'
+      ],
+      touchpad: [
+        'Touchpad tidak berfungsi',
+        'Hardware / software',
+        ['Touchpad dinonaktifkan lewat tombol fungsi/pengaturan.', 'Driver touchpad bermasalah.', 'Touchpad atau kabel fleksibel rusak.'],
+        ['Coba tombol fungsi bergambar touchpad.', 'Periksa Settings > Bluetooth & devices > Touchpad.', 'Gunakan mouse eksternal sementara.', 'Perbarui driver dari sumber resmi produsen.'],
+        'Aktifkan pengaturan, perbarui driver resmi, lalu minta teknisi memeriksa perangkat jika tetap gagal.'
+      ],
+      windows: [
+        'Windows corrupt / gagal masuk',
+        'Software / sistem operasi',
+        ['File sistem rusak.', 'Pembaruan Windows gagal.', 'Driver konflik.', 'SSD/HDD bermasalah atau penuh.'],
+        ['Catat pesan error.', 'Cadangkan data penting jika masih bisa masuk Windows.', 'Lepaskan USB yang tidak diperlukan.', 'Coba Startup Repair jika tersedia.', 'Jangan reset/instal ulang sebelum mempertimbangkan backup.'],
+        'Teknisi memeriksa drive, memperbaiki startup/file sistem, atau instal ulang setelah persetujuan dan backup.'
+      ],
+      bsod: [
+        'Blue Screen (BSOD)',
+        'Software / hardware',
+        ['Driver tidak kompatibel.', 'RAM atau storage bermasalah.', 'File sistem rusak.', 'Update atau perangkat baru memicu konflik.'],
+        ['Catat stop code.', 'Ingat perubahan terakhir pada driver atau perangkat.', 'Cadangkan data jika Windows masih dapat dibuka.', 'Jika berulang, minta teknisi memeriksa RAM, SSD, suhu, dan driver.'],
+        'Perbaikan berdasarkan stop code dan hasil pengujian komponen.'
+      ],
+      panas: [
+        'Laptop cepat panas',
+        'Hardware / pendinginan',
+        ['Ventilasi tertutup debu.', 'Kipas tidak optimal.', 'Aplikasi memakai CPU/GPU tinggi.', 'Sistem pendingin perlu perawatan.'],
+        ['Letakkan laptop pada permukaan keras dan rata.', 'Pastikan ventilasi tidak tertutup.', 'Tutup aplikasi berat.', 'Jika panas ekstrem atau berbau, hentikan penggunaan.'],
+        'Teknisi memeriksa kipas, ventilasi, heatsink, dan sistem pendingin.'
+      ],
+      lambat: [
+        'Laptop lemot',
+        'Software / hardware',
+        ['Aplikasi startup terlalu banyak.', 'RAM terbatas.', 'Storage penuh atau menurun.', 'Malware atau aplikasi tak diinginkan.'],
+        ['Restart dan tutup aplikasi yang tidak dipakai.', 'Periksa ruang penyimpanan.', 'Lihat aplikasi yang memakai sumber daya tinggi di Task Manager.', 'Jalankan pemindaian Windows Security.'],
+        'Optimasi startup, pemeriksaan storage, pembaruan sistem, atau upgrade sesuai kompatibilitas.'
+      ],
+      keyboard: [
+        'Keyboard bermasalah',
+        'Hardware / software',
+        ['Layout berubah.', 'Driver terganggu.', 'Debu atau cairan masuk.', 'Keyboard atau konektornya rusak.'],
+        ['Restart dan uji tombol.', 'Periksa layout bahasa.', 'Coba keyboard eksternal.', 'Jika terkena cairan, matikan perangkat dan jangan lanjutkan pengujian.'],
+        'Periksa pengaturan dan driver; teknisi memeriksa keyboard/konektor bila perlu.'
+      ],
+      wifi: [
+        'Wi-Fi tidak terhubung',
+        'Software / jaringan',
+        ['Mode pesawat aktif.', 'Router bermasalah.', 'Driver adaptor Wi-Fi terganggu.', 'Pengaturan jaringan rusak.'],
+        ['Pastikan mode pesawat mati.', 'Uji jaringan pada perangkat lain.', 'Restart router milik sendiri jika aman.', 'Restart laptop dan jalankan pemecah masalah jaringan.'],
+        'Periksa driver, pengaturan jaringan, dan modul Wi-Fi.'
+      ],
+      audio: [
+        'Speaker / mikrofon tidak berfungsi',
+        'Hardware / software',
+        ['Volume mute atau output salah.', 'Driver audio bermasalah.', 'Izin mikrofon belum diberikan.', 'Speaker atau jack rusak.'],
+        ['Periksa volume dan output.', 'Periksa izin mikrofon Windows.', 'Uji headset.', 'Perbarui driver dari sumber resmi.'],
+        'Atur perangkat default/izin/driver; teknisi memeriksa komponen bila tetap gagal.'
+      ],
+      storage: [
+        'SSD/HDD tidak terdeteksi',
+        'Hardware / penyimpanan',
+        ['Pengaturan boot berubah.', 'Drive atau konektornya bermasalah.', 'Drive mengalami kerusakan.'],
+        ['Catat pesan error.', 'Jangan format drive yang berisi data penting.', 'Cadangkan data jika drive masih terbaca.', 'Minta teknisi memeriksa drive.'],
+        'Pemeriksaan koneksi dan kesehatan drive. Pemulihan data tidak selalu berhasil.'
+      ],
+      usb: [
+        'Port USB tidak berfungsi',
+        'Hardware / software',
+        ['Perangkat atau kabel USB rusak.', 'Driver USB terganggu.', 'Port rusak secara fisik.'],
+        ['Uji perangkat USB lain.', 'Coba port lain.', 'Restart dan periksa Device Manager.', 'Jangan paksa konektor yang macet.'],
+        'Pemeriksaan driver chipset/USB dan port oleh teknisi.'
+      ],
+      boot: [
+        'Gagal booting',
+        'Software / storage',
+        ['Urutan boot berubah.', 'File boot Windows rusak.', 'SSD/HDD tidak terdeteksi.'],
+        ['Catat pesan error.', 'Lepas USB yang tidak diperlukan.', 'Amati apakah drive terdeteksi.', 'Gunakan Startup Repair; jangan format sebelum backup.'],
+        'Periksa drive, urutan boot, dan pemulihan startup.'
+      ],
+      beep: [
+        'Beep berulang',
+        'Hardware / POST',
+        ['Kode beep dapat menunjukkan masalah RAM, display, atau motherboard.', 'Arti beep berbeda tiap merek/model.'],
+        ['Hitung pola beep.', 'Catat merek dan model laptop.', 'Jangan menebak komponen hanya dari bunyi.', 'Rujuk dokumentasi resmi atau teknisi.'],
+        'Teknisi mengidentifikasi kode POST sesuai model dan memeriksa komponen terkait.'
+      ]
+    };
+
+    const metas = [
+      ['mati', '🔌', 'Mati total', 'Tidak ada indikator atau respons daya.'],
+      ['layar', '🖥️', 'Layar tidak menyala', 'Laptop hidup tetapi layar gelap.'],
+      ['baterai', '🔋', 'Baterai tidak mengisi', 'Persentase tidak bertambah saat dicas.'],
+      ['touchpad', '🖱️', 'Touchpad bermasalah', 'Kursor tidak merespons.'],
+      ['windows', '🪟', 'Windows corrupt', 'Windows gagal masuk atau error.'],
+      ['bsod', '⚠️', 'Blue Screen', 'Windows menampilkan stop code.'],
+      ['panas', '🌡️', 'Cepat panas', 'Suhu tinggi atau kipas berisik.'],
+      ['lambat', '🐢', 'Laptop lemot', 'Aplikasi lambat dibuka.'],
+      ['keyboard', '⌨️', 'Keyboard bermasalah', 'Tombol mati atau tidak normal.'],
+      ['wifi', '📶', 'Wi-Fi bermasalah', 'Jaringan gagal terhubung.'],
+      ['audio', '🔊', 'Audio / mic', 'Speaker atau mikrofon bermasalah.'],
+      ['storage', '💾', 'SSD/HDD', 'Drive tidak terdeteksi.'],
+      ['usb', '🔌', 'Port USB', 'Perangkat USB tidak terbaca.'],
+      ['boot', '🔄', 'Gagal booting', 'Tidak masuk Windows.'],
+      ['beep', '🔔', 'Beep berulang', 'Kode bunyi saat dinyalakan.']
+    ];
+
+    // Render Gejala Diagnostik
+    const symptomBox = document.getElementById('symptoms');
+    metas.forEach(([id, ic, n, d]) => {
+      let b = document.createElement('button');
+      b.className = 'sym';
+      b.innerHTML = `<span>${ic}</span><b>${n}</b><small>${d}</small>`;
+      b.onclick = () => {
+        document.querySelectorAll('.sym').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        diagnose(id);
+      };
+      symptomBox.append(b);
+    });
+
+    function diagnose(id) {
+      let d = db[id];
+      let r = document.getElementById('diagnosis');
+      r.style.display = 'block';
+      r.innerHTML = `
+        <span class="tag">${d[1]}</span>
+        <h3>${d[0]}</h3>
+        <b>Kemungkinan penyebab</b>
+        <ul>${d[2].map(x => `<li>${x}</li>`).join('')}</ul>
+        <b>Langkah pertama</b>
+        <ol>${d[3].map(x => `<li>${x}</li>`).join('')}</ol>
+        <b>Solusi / tindak lanjut</b>
+        <p>${d[4]}</p>
+        <div class="notice">Ini panduan awal, bukan diagnosis pasti. Jangan membongkar baterai, adaptor, atau motherboard. Gangguan internal perlu diperiksa teknisi kompeten.</div>
+        <button class="btn" onclick="contact('${id}')">Konsultasi WhatsApp</button>
+      `;
     }
 
-    // -------------------------------------------------------------
-    // B. LOGIKA AUTHENTICATION LOGIN
-    // -------------------------------------------------------------
-    const loginBox = document.getElementById('login-box');
-    const mainContent = document.getElementById('main-content');
-    const btnLogin = document.getElementById('btn-login');
-    const btnLogout = document.getElementById('btn-logout');
-    const errorMsg = document.getElementById('error-msg');
-    const userDisplay = document.getElementById('user-display');
+    function contact(id) {
+      window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent('Halo Angah Teknisi Laptop, saya ingin konsultasi: ' + db[id][0]), '_blank', 'noopener');
+    }
 
-    btnLogin.addEventListener('click', async () => {
-      const email = document.getElementById('input-email').value.trim();
-      const password = document.getElementById('input-password').value.trim();
+    // Keyboard Tester
+    const keyset = 'Esc 1 2 3 4 5 6 7 8 9 0 Q W E R T Y U I O P A S D F G H J K L Z X C V B N M Enter Space'.split(' ');
+    const keybox = document.getElementById('keys');
+    const hit = new Set();
 
-      if (!email || !password) {
-        showError('Isi email dan password!');
-        return;
+    keyset.forEach(k => {
+      let b = document.createElement('button');
+      b.className = 'key';
+      b.textContent = k;
+      b.dataset.k = k.toLowerCase();
+      keybox.append(b);
+    });
+
+    function kd(e) {
+      let k = e.key.toLowerCase() === ' ' ? 'space' : e.key.toLowerCase();
+      let b = [...document.querySelectorAll('.key')].find(x => x.dataset.k === k);
+      if (b) {
+        b.classList.add('hit');
+        hit.add(b.textContent);
+        document.getElementById('keymsg').textContent = 'Terdeteksi: ' + [...hit].join(', ');
       }
+    }
 
-      // Jika Supabase belum dikonfigurasi, gunakan akun fallback demo
-      if (!_supabase) {
-        if (email === 'teknisi@yahoo.com' && password === 'admin123') {
-          grantAccess(email);
-        } else {
-          showError('Mode Demo: Gunakan email "***********" & pass "*******" (********).');
-        }
-        return;
-      }
+    function ku(e) {
+      let k = e.key.toLowerCase() === ' ' ? 'space' : e.key.toLowerCase();
+      let b = [...document.querySelectorAll('.key')].find(x => x.dataset.k === k);
+      if (b) b.classList.remove('hit');
+    }
 
-      // Query Database Supabase ke tabel 'users'
+    window.addEventListener('keydown', kd);
+    window.addEventListener('keyup', ku);
+
+    // Screen Tester
+    document.querySelectorAll('[data-color]').forEach(b => {
+      b.onclick = () => {
+        let s = document.getElementById('screen');
+        s.style.background = b.dataset.color;
+        s.textContent = '';
+        s.style.color = b.dataset.color === '#fff' || b.dataset.color === '#0f0' ? '#111' : 'white';
+        s.requestFullscreen?.().catch(() => {});
+      };
+    });
+
+    document.getElementById('screenOff').onclick = () => {
+      let s = document.getElementById('screen');
+      s.style.background = '#111';
+      s.style.color = 'white';
+      s.textContent = 'SCREEN TEST';
+      if (document.fullscreenElement) document.exitFullscreen?.();
+    };
+
+    // Audio Tester
+    function beep(p) {
       try {
-        const { data, error } = await _supabase
-          .from('users')
-          .select('*')
-          .eq('email', email)
-          .eq('password', password);
+        let c = new (window.AudioContext || window.webkitAudioContext)();
+        let o = c.createOscillator();
+        let g = c.createGain();
+        let pan = c.createStereoPanner();
 
-        if (error || !data || data.length === 0) {
-          showError('Email atau Password salah!');
-        } else {
-          grantAccess(email);
-        }
-      } catch (err) {
-        showError('Gagal terhubung ke database Supabase.');
+        o.frequency.value = 440;
+        pan.pan.value = p;
+        g.gain.value = .1;
+
+        o.connect(pan).connect(g).connect(c.destination);
+        o.start();
+        setTimeout(() => {
+          o.stop();
+          c.close();
+        }, 450);
+      } catch (e) {
+        alert('Audio tidak didukung');
       }
-    });
-
-    function showError(txt) {
-      errorMsg.innerText = txt;
-      errorMsg.style.display = 'block';
     }
 
-    function grantAccess(email) {
-      loginBox.style.display = 'none';
-      mainContent.style.display = 'block';
-      userDisplay.innerText = 'Teknisi: ' + email;
-    }
+    document.getElementById('left').onclick = () => beep(-1);
+    document.getElementById('right').onclick = () => beep(1);
+    document.getElementById('stereo').onclick = () => beep(0);
 
-    btnLogout.addEventListener('click', () => {
-      mainContent.style.display = 'none';
-      loginBox.style.display = 'flex';
-    });
+    // Mic Tester
+    let ms, mc, mraf;
+    document.getElementById('micOn').onclick = async () => {
+      try {
+        ms = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mc = new AudioContext();
+        let src = mc.createMediaStreamSource(ms);
+        let an = mc.createAnalyser();
 
-    // -------------------------------------------------------------
-    // C. LOGIKA HARDWARE DIAGNOSTIC SYSTEM
-    // -------------------------------------------------------------
-    const diagData = {
-      dead: {
-        title: "Laptop Mati Total (Matot)",
-        causes: ["Kuningan RAM teroksidasi parah hingga konsleting jalur data VDD.", "Short pada Jalur Main Power 19V.", "IC Charger / IC Power Utama Rusak."],
-        steps: ["Lepas RAM dan ukur tegangan resistansi pada slot RAM.", "Bersihkan pin RAM menggunakan penghapus pensil antistatis.", "Cek tegangan 3.3V dan 5V ALW pada motherboard."]
-      },
-      black: {
-        title: "Lampu Menyala / Layar Hitam (No Display)",
-        causes: ["Pin RAM kotor / berdebu menghambat pembacaan BIOS.", "Kapasitas RAM tidak kompatibel dengan processor.", "BIOS corrupt pada modul memori."],
-        steps: ["Gosok pin RAM hingga mengkilap.", "Coba pasang 1 keping RAM saja secara bergantian pada slot berdedikasi.", "Lakukan pengukuran tegangan RAM (VDD, VDDQ, VTT)."]
-      },
-      shutdown: {
-        title: "Laptop Nyala Sebentar Lalu Mati",
-        causes: ["Overheat akibat pasta proc kering.", "RAM mengalami error intermittent saat overheat.", "Proteksi thermal controller aktif."],
-        steps: ["Periksa aliran udara kipas pendingin.", "Ganti thermal paste & bersihkan modul RAM."]
-      },
-      beep: {
-        title: "Suara Beep Berulang (POST Error)",
-        causes: ["RAM tidak terdeteksi oleh BIOS.", "Slot RAM longgar atau aus."],
-        steps: ["Dengarkan pola beep (3x beep berturut-turut menandakan RAM Failure).", "Pasang ulang modul RAM."]
+        an.fftSize = 256;
+        src.connect(an);
+        let a = new Uint8Array(an.frequencyBinCount);
+
+        function tick() {
+          an.getByteTimeDomainData(a);
+          let v = Math.sqrt(a.reduce((s, x) => s + (x - 128) ** 2, 0) / a.length);
+          document.getElementById('meter').style.width = Math.min(100, v * 2.5) + '%';
+          mraf = requestAnimationFrame(tick);
+        }
+
+        tick();
+        document.getElementById('micmsg').textContent = 'Mikrofon aktif. Bicara untuk melihat indikator.';
+      } catch (e) {
+        document.getElementById('micmsg').textContent = 'Izin ditolak atau mikrofon tidak tersedia.';
       }
     };
 
-    let selectedId = null;
-    const symptomBtns = document.querySelectorAll('.symptom-btn');
-    const btnDiagnose = document.getElementById('btn-diagnose');
-    const btnReset = document.getElementById('btn-reset');
-    const terminalLog = document.getElementById('terminal-log');
-    const resultOutput = document.getElementById('result-output');
-    const btnSound = document.getElementById('btn-sound');
-    const btnPrint = document.getElementById('btn-print');
+    function stopMic() {
+      if (mraf) cancelAnimationFrame(mraf);
+      if (ms) ms.getTracks().forEach(t => t.stop());
+      if (mc) mc.close();
+      ms = mc = null;
+      document.getElementById('meter').style.width = '0';
+      document.getElementById('micmsg').textContent = 'Mikrofon dihentikan.';
+    }
 
-    symptomBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        symptomBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        selectedId = btn.dataset.id;
-        btnDiagnose.disabled = false;
-      });
-    });
+    document.getElementById('micOff').onclick = stopMic;
 
-    btnDiagnose.addEventListener('click', () => {
-      if (!selectedId) return;
-      
-      // Animasi Terminal Scan
-      terminalLog.innerHTML = "> INITIATING DIAGNOSTIC SCAN...<br>> CHECKING RAM BUS SPEEDS...<br>> READING POST CODES...";
-      resultOutput.style.display = 'none';
-
-      setTimeout(() => {
-        const item = diagData[selectedId];
-        terminalLog.innerHTML = `> SCAN COMPLETE. Problem identified: <span style="color:var(--gold);">${item.title}</span>`;
-        
-        resultOutput.innerHTML = `
-          <h3 style="color:var(--blue); margin-top:15px; margin-bottom:10px;">${item.title}</h3>
-          <h4 style="color:var(--cyan); font-size:13px; margin-top:10px;">KEMUNGKINAN PENYEBAB:</h4>
-          <ul style="padding-left:18px; font-size:13px; color:var(--muted);">
-            ${item.causes.map(c => `<li>${c}</li>`).join('')}
-          </ul>
-          <h4 style="color:var(--cyan); font-size:13px; margin-top:10px;">LANGKAH PERBAIKAN TEKNISI:</h4>
-          <ol style="padding-left:18px; font-size:13px; color:var(--text);">
-            ${item.steps.map(s => `<li>${s}</li>`).join('')}
-          </ol>
-        `;
-        resultOutput.style.display = 'block';
-        btnPrint.style.display = 'inline-block';
-        
-        if (selectedId === 'beep' || selectedId === 'black') {
-          btnSound.style.display = 'inline-block';
-        } else {
-          btnSound.style.display = 'none';
-        }
-      }, 1000);
-    });
-
-    btnReset.addEventListener('click', () => {
-      selectedId = null;
-      symptomBtns.forEach(b => b.classList.remove('active'));
-      btnDiagnose.disabled = true;
-      terminalLog.innerHTML = "SYSTEM READY. Waiting for diagnostic input...";
-      resultOutput.style.display = 'none';
-      btnSound.style.display = 'none';
-      btnPrint.style.display = 'none';
-    });
-
-    // Web Audio Synthesizer untuk Beep Code RAM Error (3x Beep)
-    btnSound.addEventListener('click', () => {
-      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      let times = 3;
-      
-      function playTone(delay) {
-        setTimeout(() => {
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start();
-          osc.stop(audioCtx.currentTime + 0.15);
-        }, delay);
+    // Webcam Tester
+    let cs;
+    document.getElementById('camOn').onclick = async () => {
+      try {
+        cs = await navigator.mediaDevices.getUserMedia({ video: true });
+        document.getElementById('cam').srcObject = cs;
+        document.getElementById('cammsg').textContent = '';
+      } catch (e) {
+        document.getElementById('cammsg').textContent = 'Kamera tidak tersedia atau izin belum diberikan.';
       }
+    };
 
-      for (let i = 0; i < times; i++) {
-        playTone(i * 300);
+    document.getElementById('camOff').onclick = () => {
+      if (cs) cs.getTracks().forEach(t => t.stop());
+      cs = null;
+      document.getElementById('cam').srcObject = null;
+      document.getElementById('cammsg').textContent = 'Kamera dimatikan.';
+    };
+
+    // Booking & Ticket System (LocalStorage)
+    const store = 'angah_tickets_demo';
+
+    function tickets() {
+      try {
+        return JSON.parse(localStorage.getItem(store) || '[]');
+      } catch (e) {
+        return [];
       }
+    }
+
+    function save(a) {
+      localStorage.setItem(store, JSON.stringify(a));
+    }
+
+    function render() {
+      let a = tickets();
+      document.getElementById('rows').innerHTML = a.length
+        ? a.map(x => `<tr><td>${x.id}</td><td>${x.merek} ${x.model || ''}</td><td>${x.keluhan}</td><td>${x.status}</td></tr>`).join('')
+        : '<tr><td colspan="4">Belum ada tiket demo.</td></tr>';
+
+      document.getElementById('history').innerHTML = a.length
+        ? '<h3>Riwayat tiket lokal</h3>' + a.map(x => `<p>${x.id} · ${x.merek} · ${x.status}</p>`).join('')
+        : 'Belum ada riwayat tiket di browser ini.';
+    }
+
+    render();
+
+    document.getElementById('bookingForm').onsubmit = e => {
+      e.preventDefault();
+      let d = Object.fromEntries(new FormData(e.target));
+      let id = 'ANG-' + new Date().getFullYear() + '-' + Math.floor(10000 + Math.random() * 89999);
+      let a = tickets();
+
+      a.push({ id, ...d, status: 'Menunggu konfirmasi', created: new Date().toLocaleString('id-ID') });
+      save(a);
+      render();
+
+      document.getElementById('ticketSearch').value = id;
+      let msg = `Halo Angah Teknisi Laptop, saya ingin booking servis.%0ANomor tiket: ${id}%0ANama: ${d.nama}%0ANo HP: ${d.hp}%0ALaptop: ${d.merek} ${d.model}%0ALayanan: ${d.layanan}%0AKeluhan: ${d.keluhan}%0ATanggal: ${d.tanggal} ${d.jam}%0AMetode: ${d.metode}%0AMohon konfirmasi jadwal.`;
+
+      window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent(decodeURIComponent(msg)), '_blank', 'noopener');
+      e.target.reset();
+      alert('Nomor tiket demo: ' + id + '. Simpan nomor ini; booking menunggu konfirmasi teknisi.');
+    };
+
+    document.getElementById('track').onclick = () => {
+      let id = document.getElementById('ticketSearch').value.trim().toUpperCase();
+      let x = tickets().find(t => t.id === id);
+      let r = document.getElementById('trackResult');
+      r.style.display = 'block';
+      r.innerHTML = x
+        ? `<span class="tag">${x.status}</span><h3>${x.id}</h3><p>Perangkat: ${x.merek} ${x.model || ''}</p><p>Keluhan: ${x.keluhan}</p><p>Daftar: ${x.created}</p><small>Data demo hanya tersedia di browser ini.</small>`
+        : 'Tiket tidak ditemukan pada browser ini.';
+    };
+
+    // Dashboard Admin Tabs
+    document.querySelectorAll('[data-tab]').forEach(b => {
+      b.onclick = () => {
+        ['tickets', 'stock', 'invoice'].forEach(id => {
+          document.getElementById(id).classList.toggle('hidden', id !== b.dataset.tab);
+        });
+      };
     });
 
-    // RAM Pin Cleaner Simulator Tool
-    const cleanerTool = document.getElementById('cleaner-tool');
-    const ramPinVisual = document.getElementById('ram-pin-visual');
-    const cleanStatus = document.getElementById('clean-status');
-    let isClean = false;
+    // Invoice Generator
+    document.getElementById('makeInvoice').onclick = () => {
+      let cost = Number(document.getElementById('ivCost').value || 0);
+      let r = document.getElementById('ivOut');
+      r.style.display = 'block';
+      r.innerHTML = `
+        <div style="background:#f5f9ff;color:#102039;padding:16px;border-radius:10px">
+          <h2>ANGAH TEKNISI LAPTOP</h2>
+          <p>Jalan Dorak · 082385634631</p>
+          <hr>
+          <b>INVOICE DEMO</b>
+          <p>No tiket: ${document.getElementById('ivTicket').value}</p>
+          <p>Pelanggan: ${document.getElementById('ivName').value}</p>
+          <p>Layanan: ${document.getElementById('ivDesc').value}</p>
+          <h2>Rp ${cost.toLocaleString('id-ID')}</h2>
+          <small>Contoh invoice, bukan bukti pembayaran.</small>
+          <p style="margin-top:10px"><button class="btn" onclick="print()">Cetak</button></p>
+        </div>
+      `;
+    };
 
-    cleanerTool.addEventListener('click', () => {
-      isClean = !isClean;
-      if (isClean) {
-        ramPinVisual.classList.remove('ram-dirty');
-        ramPinVisual.classList.add('ram-clean');
-        cleanStatus.innerText = "Status Pin: BERSIH / MENGKILAP (Jalur Sinyal Lancar)";
-        cleanStatus.style.color = "var(--green-accent)";
-      } else {
-        ramPinVisual.classList.remove('ram-clean');
-        ramPinVisual.classList.add('ram-dirty');
-        cleanStatus.innerText = "Status Pin: KOTOR / TEROKSIDASI";
-        cleanStatus.style.color = "var(--gold)";
-      }
-    });
+    // Estimasi Calculator
+    document.getElementById('estimateBtn').onclick = () => {
+      let service = document.getElementById('estimateType').value;
+      let time = document.getElementById('estimateTime').value;
+      let r = document.getElementById('estimateResult');
+      r.style.display = 'block';
+      r.innerHTML = `
+        <h3>Estimasi: ${service}</h3>
+        <p><b>Biaya:</b> Belum ditentukan — konfirmasi langsung dengan teknisi setelah pemeriksaan.</p>
+        <p><b>Waktu:</b> ${time}. Durasi akhir bergantung pada tingkat kerusakan dan ketersediaan komponen.</p>
+        <small>Tarif belum dimasukkan karena daftar harga resmi Angah belum diberikan. Jangan menganggap ini sebagai penawaran harga tetap.</small>
+      `;
+    };
 
-    // Print Work Order
-    btnPrint.addEventListener('click', () => {
-      window.print();
-    });
+    // Date Picker Min Limit
+    document.querySelector('input[name=tanggal]').min = new Date().toISOString().slice(0, 10);
   </script>
 </body>
 </html>
